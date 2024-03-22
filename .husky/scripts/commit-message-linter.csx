@@ -6,13 +6,16 @@
 
 using System.Text.RegularExpressions;
 
-private var pattern = @"^(?=.{1,90}$)(?:build|feature|ci|chore|dependabot|docs|fix|perf|refactor|revert|style|test)(?:\(.+\))*(?::).{4,}(?:#\d+)*(?<![\.\s])$";
+private var validTypes = new string[] { "build", "ci", "chore", "dependabot", "docs", "feature", "fix", "perf", "refactor", "revert", "style", "test" };
+private var pattern = $"^(?=.{{1,90}}$)(?:{string.Join("|", validTypes)})(?:\\(.+\\))*(?::).{{4,}}(?:#\\d+)*(?<![\\.\\s])$";
+
 
 private var msg = File.ReadAllLines(Args[0])[0];
 
 if (Regex.IsMatch(msg, pattern))
-   return 0;
-
+{
+  return 0;
+}
 
 Console.ForegroundColor = ConsoleColor.Red;
 Console.WriteLine("");
@@ -24,7 +27,7 @@ Console.WriteLine("  <type>: <subject>");
 Console.WriteLine("  <type>(<scope>): <subject>");
 Console.WriteLine("");
 Console.WriteLine("Where:");
-Console.WriteLine("  - <type>: build, feature, ci, chore, dependabot, docs, fix, perf, refactor, revert, style, test");
+Console.WriteLine($"  - <type>: {string.Join(", ", validTypes)}");
 Console.WriteLine("  - <scope>: (optional) usually used for story or issue number");
 Console.WriteLine("  - <subject>: at least 4 characters long");
 Console.WriteLine("");
