@@ -6,9 +6,10 @@ public class Class1
     {
     }
 
-    public void Method1()
+    public void Mthod1()
     {
-        Console.WriteLine("Hello World");
+        var temp = "warning";
+        Console.WriteLine(temp);
 
         var testWarningsAsErrors = new TestClass
         {
