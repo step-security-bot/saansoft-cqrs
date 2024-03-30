@@ -1,9 +1,6 @@
-name: Dependabot auto-approve and merge
+name: dependabot-auto-approve-and-merge
 
-on:
-  workflow_run:
-    workflows: ["build-and-test.yml"]
-    types: [completed]
+on: pull_request
 
 permissions:
   pull-requests: write
@@ -15,48 +12,22 @@ jobs:
     # Checking the author and fork will prevent your Action run failing on non-Dependabot PRs
     if: |
       github.event.repository.fork == false &&
-      github.event.workflow_run.event == 'pull_request' &&
-      github.event.workflow_run.conclusion == 'success' &&
-      github.actor == 'dependabot[bot]'
-    # if: |
-    #   github.event.repository.fork == false &&
-    #   github.event.pull_request.user.login == 'dependabot[bot]'
+      github.event.pull_request.user.login == 'dependabot[bot]'
     steps:
+      - name: Checkout code
+        uses: actions/checkout@1e31de5234b9f8995739874a8ce0492dc87873e2 # v4
+
       - name: Dependabot metadata
         uses: dependabot/fetch-metadata@v2
         id: dependabot-metadata
 
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Get pull request information
-        id: pr_info
-        run: |
-          echo "github.event.pull_request: ${{ github.event }}"
-      #    echo "::set-output name=user::${{ github.event.pull_request.user.login }}"
-        if: github.event_name == 'pull_request'
-
-
-      - name: Dry run merge pull request
-        run: git merge --no-commit --no-ff "${{ github.event.pull_request.head.ref }}"
-
-      - name: Check for conflicts
-        id: check-conflicts
-        run: |
-          if git status | grep -q "both modified"; then
-            echo "Conflict detected in the pull request. Please resolve conflicts."
-            echo "::set-output name=is_success::false"
-            exit 1
-          else
-            echo "No conflicts detected. Pull request can be merged."
-            echo "::set-output name=is_success::true"
-          fi
+      - name: Check for merge conflicts
+        uses: sv-tools/block-merge-conflicts@2fb5852d0efb87ecceed7a3d24ad657dccf47a64 # v1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Approve a PR if not already approved
-        if: ${{
-          steps.dependabot-metadata.outputs.update-type != 'version-update:semver-major' &&
-          steps.check-conflicts.outputs.is_success == 'true'
-          }}
+        if: ${{ steps.dependabot-metadata.outputs.update-type != 'version-update:semver-major' }}
         run: |
           gh pr checkout "$PR_URL" # sets the upstream metadata for `gh pr status`
           if [ "$(gh pr status --json reviewDecision -q .currentBranch.reviewDecision)" != "APPROVED" ];
@@ -67,7 +38,7 @@ jobs:
           PR_URL: ${{github.event.pull_request.html_url}}
           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
 
-      - name: Auto-merge for Dependabot PRs
+      - name: Auto-merge
         if: ${{ steps.dependabot-metadata.outputs.update-type != 'version-update:semver-major' }}
         run: gh pr merge --auto --squash "$PR_URL"
         env:
