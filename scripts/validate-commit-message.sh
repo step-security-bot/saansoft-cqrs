@@ -17,8 +17,8 @@ fi
 commit_message="$1"
 
 
-validTypes="bugfix|build|ci|chore|docs|feature|fix|hotfix|perf|refactor|revert|style|test"
-valid_msg_regex="^($validTypes)(\(.{3,}\))?: .{4,}"
+validTypes="breaking change|bugfix|build|ci|chore|docs|feat|feature|fix|hotfix|perf|refactor|revert|style|test"
+valid_msg_regex="^($validTypes)(\(.{3,}\))?!?: .{4,}"
 
 if [[ ! $commit_message =~ $valid_msg_regex ]]; then
     commaSeparatedList=$(echo "$validTypes" | tr '|' ', ')
@@ -35,6 +35,12 @@ if [[ ! $commit_message =~ $valid_msg_regex ]]; then
     echo "    - feature(ABC-123): subject"
     echo "    - fix: subject"
     echo "  More info: https://www.conventionalcommits.org/en/v1.0.0/"
+    echo ""
+    echo "  ${RED}HELP:${NC}"
+    echo "    - If you are using zhs command line, and the '!' character for breaking changes. You may get the error:"
+    echo "      > zsh: illegal modifier:"
+    echo "      In your commit message use single quotes around the commit message."
+
 
     exit 1
 fi

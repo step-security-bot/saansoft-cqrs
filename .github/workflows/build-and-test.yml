@@ -1,14 +1,7 @@
-name: build
+name: build-and-test
 
 on:
   pull_request:
-    paths-ignore:
-      - '.githooks/**'
-      - '.idea/**'
-      - '.vs/**'
-      - '.vscode/**'
-      - '**.dic'
-      - '**.md'
   push:
     branches:
       - main
