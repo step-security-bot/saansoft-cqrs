@@ -1,0 +1,48 @@
+name: lint
+
+on: pull_request
+
+jobs:
+  super-linter:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+      packages: read
+      # To report GitHub Actions status checks
+      statuses: write
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          # super-linter needs the full git history to get the
+          # list of files that changed across commits
+          fetch-depth: 0
+
+      - name: super-linter
+        uses: super-linter/super-linter@v6.3.0  # x-release-please-version
+        env:
+          # To report GitHub Actions status checks
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          FILTER_REGEX_EXCLUDE: (./\.editorconfig|\.idea/*|\.vscode/*)
+          IGNORE_GENERATED_FILES: true
+          # false -> only checks changed files
+          VALIDATE_ALL_CODEBASE: false
+          VALIDATE_CSHARP: true
+          VALIDATE_GITHUB_ACTIONS: true
+          VALIDATE_YAML: true
+
+  spellcheck:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Spell check
+        uses: streetsidesoftware/cspell-action@v6
+        with:
+          config: .cspell.json
+          check_dot_files: false
+          incremental_files_only: true
+
