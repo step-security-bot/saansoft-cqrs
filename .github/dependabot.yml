@@ -28,3 +28,18 @@ updates:
       timezone: "Australia/Perth"
     commit-message:
       prefix: "dependencies(nuget): "
+
+  - package-ecosystem: nuget
+    directory: /examples/SaanSoft.Cqrs.Example.InMemory.Api
+    schedule:
+      interval: daily
+
+  - package-ecosystem: nuget
+    directory: /src/SaanSoft.Cqrs
+    schedule:
+      interval: daily
+
+  - package-ecosystem: nuget
+    directory: /test/SaanSoft.Tests.Cqrs
+    schedule:
+      interval: daily
