@@ -2,6 +2,9 @@ name: lint
 
 on: pull_request
 
+permissions:
+  contents: read
+
 jobs:
   super-linter:
     runs-on: ubuntu-latest
@@ -13,6 +16,11 @@ jobs:
       statuses: write
 
     steps:
+      - name: Harden Runner
+        uses: step-security/harden-runner@63c24ba6bd7ba022e95695ff85de572c04a18142 # v2.7.0
+        with:
+          egress-policy: audit
+
       - name: Checkout code
         uses: actions/checkout@9bb56186c3b09b4f86b1c65136769dd318469633 # v4.1.2
         with:
@@ -53,8 +61,16 @@ jobs:
           VALIDATE_YAML: true
 
   spellcheck:
+    permissions:
+      contents: read  # for streetsidesoftware/cspell-action to fetch files for commit
+      pull-requests: read  # for streetsidesoftware/cspell-action to fetch commits for PR
     runs-on: ubuntu-latest
     steps:
+      - name: Harden Runner
+        uses: step-security/harden-runner@63c24ba6bd7ba022e95695ff85de572c04a18142 # v2.7.0
+        with:
+          egress-policy: audit
+
       - name: Checkout code
         uses: actions/checkout@9bb56186c3b09b4f86b1c65136769dd318469633 # v4.1.2
 
