@@ -6,7 +6,7 @@ namespace SaanSoft.Cqrs.Messages;
 /// Base class with common properties for all messages
 /// You should never directly inherit from BaseMessage{TMessageId}
 ///
-/// Use <see cref="BaseCommand{TMessageId}"/>, <see cref="BaseEvent{TMessageId, TEntityKey}"/> or <see cref="BaseQuery{TMessageId, TResult}"/> instead
+/// Use <see cref="BaseCommand{TMessageId}"/>, <see cref="BaseEvent{TMessageId, TEntityKey}"/> or <see cref="BaseQuery{TMessageId, TResponse}"/> instead
 /// </summary>
 public abstract class BaseMessage<TMessageId> : IMessage<TMessageId>
     where TMessageId : struct
@@ -15,7 +15,7 @@ public abstract class BaseMessage<TMessageId> : IMessage<TMessageId>
     public TMessageId? TriggeredById { get; set; }
     public string? CorrelationId { get; set; }
     public string? AuthenticatedId { get; set; }
-    public DateTime ReceivedOnUtc { get; set; } = DateTime.UtcNow;
+    public DateTime MessageOnUtc { get; set; } = DateTime.UtcNow;
 
     public string TypeFullName { get; set; }
 

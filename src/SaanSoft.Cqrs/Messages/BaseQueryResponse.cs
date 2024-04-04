@@ -1,19 +1,18 @@
 namespace SaanSoft.Cqrs.Messages;
 
-public abstract class BaseQueryResult : IQueryResult
+public abstract class BaseQueryResponse : IQueryResponse
 {
-    protected BaseQueryResult()
+    protected BaseQueryResponse()
     {
         IsSuccess = true;
     }
 
-    protected BaseQueryResult(string errorMessage)
+    protected BaseQueryResponse(string errorMessage)
     {
         IsSuccess = false;
         ErrorMessage = errorMessage;
     }
 
-    public bool IsSuccess { get; set; } = false;
-
+    public bool IsSuccess { get; set; }
     public string? ErrorMessage { get; set; }
 }
