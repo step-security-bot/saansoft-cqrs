@@ -49,7 +49,7 @@ jobs:
           --no-restore
           --configuration Release
           --logger "GitHubActions;summary.includePassedTests=true;summary.includeSkippedTests=true;annotations.titleFormat=@test;annotations.messageFormat=@error\n@trace"
-          /p:CollectCoverage=true /p:Exclude="SaanSoft.Tests.*" /p:CoverletOutputFormat=\"opencover,json\" /p:CoverletOutput="../../reports/coverage/"  /p:MergeWith="../../reports/coverage/coverage.json"
+          /p:CollectCoverage=true
           --
           RunConfiguration.CollectSourceInformation=true
 
