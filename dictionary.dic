@@ -1,7 +1,10 @@
+bson
 color
 cqrs
 extern
+nojournal
 opencover
+ouput
 Saan
 SaanSoft
 signoff
