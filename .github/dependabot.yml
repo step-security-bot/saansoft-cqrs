@@ -43,3 +43,18 @@ updates:
     directory: /test/SaanSoft.Tests.Cqrs
     schedule:
       interval: daily
+
+  - package-ecosystem: nuget
+    directory: /src/SaanSoft.Cqrs.Store.MongoDB
+    schedule:
+      interval: daily
+
+  - package-ecosystem: nuget
+    directory: /test/SaanSoft.Tests.Cqrs.Common
+    schedule:
+      interval: daily
+
+  - package-ecosystem: nuget
+    directory: /test/SaanSoft.Tests.Cqrs.Store.MongoDB
+    schedule:
+      interval: daily
